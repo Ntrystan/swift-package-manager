@@ -64,10 +64,9 @@ def clean_args(args):
     if platform.system() == "Darwin":
         args.sdk_root = call_output(["xcrun", "--sdk", "macosx", "--show-sdk-path"])
 
-    # Get the toolchain path.
-    if args.toolchain_path is None:
         # If a package wasn't provided, use the current selected toolchain on Darwin.
-        if platform.system() == "Darwin":
+    if platform.system() == "Darwin":
+        if args.toolchain_path is None:
             swiftc_path = call_output(["xcrun", "--find", "swift"])
             args.toolchain_path = os.path.join(swiftc_path, "../../../")
     if args.toolchain_path is None:
@@ -80,7 +79,7 @@ def clean_args(args):
         args.swift_path = os.path.abspath(args.swift_path)
     else:
         args.swift_path = os.path.join(args.toolchain_path, "usr", "bin", "swift")
-    note("testing using 'swift': %s" % args.swift_path)
+    note(f"testing using 'swift': {args.swift_path}")
 
     if args.swiftc_path:
         args.swiftc_path = os.path.abspath(args.swiftc_path)
@@ -91,18 +90,18 @@ def clean_args(args):
 
     if args.swiftpm_bin_dir:
         args.swiftpm_bin_dir = os.path.abspath(args.swiftpm_bin_dir)
-        note("testing using swiftpm binary directory: %s" % args.swiftpm_bin_dir)
+        note(f"testing using swiftpm binary directory: {args.swiftpm_bin_dir}")
         args.swift_test_path = os.path.join(args.swiftpm_bin_dir, "swift-test")
     else:
-        args.swift_test_path = args.swift_path + '-test'
+        args.swift_test_path = f'{args.swift_path}-test'
 
 def test(args):
     cmd = ["env"]
     for key, value in get_env(args).items():
         if " " in value:
-            error("Can't set environment variable %s as it contains a space: %s" % (key, value))
+            error(f"Can't set environment variable {key} as it contains a space: {value}")
         else:
-            cmd += ['%s=%s' % (key,value)]
+            cmd += [f'{key}={value}']
 
     integration_test_dir = os.path.join(args.project_root, "IntegrationTests")
     cmd += [
