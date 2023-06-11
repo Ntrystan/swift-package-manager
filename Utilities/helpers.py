@@ -17,11 +17,11 @@ import os
 import errno
 
 def note(message):
-    print("--- %s: note: %s" % (os.path.basename(sys.argv[0]), message))
+    print(f"--- {os.path.basename(sys.argv[0])}: note: {message}")
     sys.stdout.flush()
 
 def error(message):
-    print("--- %s: error: %s" % (os.path.basename(sys.argv[0]), message))
+    print(f"--- {os.path.basename(sys.argv[0])}: error: {message}")
     sys.stdout.flush()
     raise SystemExit(1)
 
